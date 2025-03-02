@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Blog</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center p-8">
+    <h1 class="text-4xl font-bold mb-8">Daily Blog</h1>
+    
+    <div class="w-full max-w-2xl">
+        <textarea id="postContent" class="w-full p-4 mb-4 border border-gray-300 rounded-lg" placeholder="Write your post here..."></textarea>
+        <button onclick="createPost()" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600">Create Post</button>
+        
+        <div id="posts" class="mt-8 space-y-4"></div>
+    </div>
+
+    <script>
+        function createPost() {
+            const content = document.getElementById("postContent").value;
+            if (content.trim() === "") {
+                alert("Please write something to create a post.");
+                return;
+            }
+
+            const postElement = document.createElement("div");
+            postElement.className = "bg-white p-6 rounded-lg shadow-md";
+            postElement.innerHTML = `
+                <p class="mb-4">${content}</p>
+                <button onclick="likePost(this)" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Like</button>
+                <span class="ml-2">0 Likes</span>
+            `;
+
+            document.getElementById("posts").prepend(postElement);
+            document.getElementById("postContent").value = "";
+        }
+
+        function likePost(button) {
+            const likeCount = button.nextElementSibling;
+            let likes = parseInt(likeCount.textContent.split(" ")[0]);
+            likes++;
+            likeCount.textContent = `${likes} Likes`;
+        }
+    </script>
+</body>
+</html>
