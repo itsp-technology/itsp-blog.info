@@ -10,30 +10,44 @@
     <h1 class="text-4xl font-bold mb-8">Daily Blog</h1>
     
     <div class="w-full max-w-2xl">
-        <textarea id="postContent" class="w-full p-4 mb-4 border border-gray-300 rounded-lg" placeholder="Write your post here..."></textarea>
+        <input id="postTitle" class="w-full p-4 mb-4 border border-gray-300 rounded-lg" placeholder="Enter post title here..."/>
+        <div contenteditable="true" id="postContent" class="w-full p-4 mb-4 border border-gray-300 rounded-lg bg-white" placeholder="Write your post here..."></div>
+        <div class="mb-4">
+            <button onclick="formatText('bold')" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">Bold</button>
+            <button onclick="formatText('italic')" class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600">Italic</button>
+            <button onclick="formatText('underline')" class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600">Underline</button>
+        </div>
         <button onclick="createPost()" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600">Create Post</button>
         
         <div id="posts" class="mt-8 space-y-4"></div>
     </div>
 
     <script>
+        function formatText(command) {
+            document.execCommand(command, false, null);
+        }
+
         function createPost() {
-            const content = document.getElementById("postContent").value;
-            if (content.trim() === "") {
-                alert("Please write something to create a post.");
+            const title = document.getElementById("postTitle").value;
+            const content = document.getElementById("postContent").innerHTML;
+
+            if (title.trim() === "" || content.trim() === "") {
+                alert("Please fill in both title and content to create a post.");
                 return;
             }
 
             const postElement = document.createElement("div");
             postElement.className = "bg-white p-6 rounded-lg shadow-md";
             postElement.innerHTML = `
-                <p class="mb-4">${content}</p>
+                <h2 class="text-2xl font-bold mb-2">${title}</h2>
+                <div class="mb-4">${content}</div>
                 <button onclick="likePost(this)" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Like</button>
                 <span class="ml-2">0 Likes</span>
             `;
 
             document.getElementById("posts").prepend(postElement);
-            document.getElementById("postContent").value = "";
+            document.getElementById("postTitle").value = "";
+            document.getElementById("postContent").innerHTML = "";
         }
 
         function likePost(button) {
